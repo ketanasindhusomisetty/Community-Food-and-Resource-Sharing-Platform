@@ -1,0 +1,1438 @@
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FoodShare Connect - Community Food &amp; Resource Sharing Platform</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&amp;family=Playfair+Display:wght@700&amp;display=swap" rel="stylesheet">
+  <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html, body {
+            height: 100%;
+            width: 100%; 
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .app-wrapper {
+            width: 100%;
+            min-height: 100%;
+            overflow-x: hidden;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #065f46 0%, #047857 25%, #10b981 50%, #34d399 75%, #6ee7b7 100%);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+        
+        @keyframes floating {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .pulse-glow {
+            animation: pulseGlow 2s ease-in-out infinite;
+        }
+        
+        @keyframes pulseGlow {
+            0%, 100% { box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+            50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.8); }
+        }
+        
+        .slide-in-left {
+            animation: slideInLeft 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .slide-in-right {
+            animation: slideInRight 0.8s ease-out forwards;
+        }
+        
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(50px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+        
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .scale-in {
+            animation: scaleIn 0.5s ease-out forwards;
+        }
+        
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.8); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .counter-number {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #10b981;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .card-hover {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-10px) scale(1.02);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #047857 0%, #059669 100%);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4);
+        }
+        
+        .section-divider {
+            background: linear-gradient(90deg, transparent, #10b981, transparent);
+            height: 2px;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, #065f46 0%, #10b981 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .feature-icon {
+            background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+        }
+        
+        .testimonial-card {
+            background: linear-gradient(145deg, #ffffff 0%, #f0fdf4 100%);
+        }
+        
+        .scroll-indicator {
+            animation: bounce 2s infinite;
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            60% { transform: translateY(-5px); }
+        }
+        
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+        
+        .overlay {
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: #f0fdf4;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #10b981, #059669);
+            border-radius: 4px;
+        }
+        
+        .food-pattern {
+            background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2310b981' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+        
+        .modal.active {
+            display: flex;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            background: #065f46;
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+            transform: translateX(150%);
+            transition: transform 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 1001;
+        }
+        
+        .toast.active {
+            transform: translateX(0);
+        }
+    </style>
+  <style>body { box-sizing: border-box; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+ </head>
+ <body class="h-full bg-gray-50">
+  <div class="app-wrapper"><!-- Navigation -->
+   <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="flex justify-between items-center h-16 md:h-20"><!-- Logo -->
+      <div class="flex items-center space-x-2">
+       <div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg"><span class="text-white text-xl md:text-2xl">🍽️</span>
+       </div>
+       <div>
+        <h1 class="text-lg md:text-xl font-bold text-gradient">FoodShare</h1>
+        <p class="text-xs text-gray-500 -mt-1 hidden sm:block">Connect &amp; Share</p>
+       </div>
+      </div><!-- Desktop Navigation -->
+      <div class="hidden md:flex items-center space-x-8"><a href="#home" class="nav-link text-gray-700 hover:text-emerald-600 font-medium transition-colors">Home</a> <a href="#about" class="nav-link text-gray-700 hover:text-emerald-600 font-medium transition-colors">About</a> <a href="#features" class="nav-link text-gray-700 hover:text-emerald-600 font-medium transition-colors">Features</a> <a href="#how-it-works" class="nav-link text-gray-700 hover:text-emerald-600 font-medium transition-colors">How It Works</a> <a href="#impact" class="nav-link text-gray-700 hover:text-emerald-600 font-medium transition-colors">Impact</a> <a href="#contact" class="nav-link text-gray-700 hover:text-emerald-600 font-medium transition-colors">Contact</a>
+      </div><!-- CTA Buttons -->
+      <div class="hidden md:flex items-center space-x-3"><button onclick="openModal('loginModal')" class="px-4 py-2 text-emerald-600 font-semibold hover:bg-emerald-50 rounded-lg transition-all">Login</button> <button onclick="openModal('signupModal')" class="btn-primary px-5 py-2.5 text-white font-semibold rounded-xl shadow-lg">Join Now</button>
+      </div><!-- Mobile Menu Button --> <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg hover:bg-gray-100 transition-colors">
+       <svg id="menuIcon" class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+       </svg>
+       <svg id="closeIcon" class="w-6 h-6 text-gray-700 hidden" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+       </svg></button>
+     </div>
+    </div><!-- Mobile Menu -->
+    <div id="mobileMenu" class="mobile-menu fixed top-16 left-0 bottom-0 w-72 bg-white shadow-2xl md:hidden overflow-y-auto">
+     <div class="p-6 space-y-4"><a href="#home" onclick="closeMobileMenu()" class="block py-3 px-4 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl font-medium transition-all">🏠 Home</a> <a href="#about" onclick="closeMobileMenu()" class="block py-3 px-4 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl font-medium transition-all">ℹ️ About</a> <a href="#features" onclick="closeMobileMenu()" class="block py-3 px-4 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl font-medium transition-all">⭐ Features</a> <a href="#how-it-works" onclick="closeMobileMenu()" class="block py-3 px-4 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl font-medium transition-all">🔄 How It Works</a> <a href="#impact" onclick="closeMobileMenu()" class="block py-3 px-4 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl font-medium transition-all">📊 Impact</a> <a href="#contact" onclick="closeMobileMenu()" class="block py-3 px-4 text-gray-700 hover:bg-emerald-50 hover:text-emerald-600 rounded-xl font-medium transition-all">📞 Contact</a>
+      <div class="pt-4 border-t border-gray-200 space-y-3"><button onclick="openModal('loginModal'); closeMobileMenu();" class="w-full py-3 text-emerald-600 font-semibold border-2 border-emerald-600 rounded-xl hover:bg-emerald-50 transition-all">Login</button> <button onclick="openModal('signupModal'); closeMobileMenu();" class="w-full btn-primary py-3 text-white font-semibold rounded-xl shadow-lg">Join Now</button>
+      </div>
+     </div>
+    </div>
+   </nav><!-- Mobile Menu Overlay -->
+   <div id="mobileOverlay" class="overlay fixed inset-0 bg-black/50 z-40 md:hidden" onclick="closeMobileMenu()"></div><!-- Hero Section -->
+   <section id="home" class="relative min-h-screen flex items-center hero-gradient overflow-hidden"><!-- Decorative Elements -->
+    <div class="absolute inset-0 overflow-hidden">
+     <div class="absolute top-20 left-10 w-32 h-32 bg-white/10 rounded-full blur-2xl floating"></div>
+     <div class="absolute bottom-40 right-20 w-48 h-48 bg-white/10 rounded-full blur-3xl floating" style="animation-delay: 1s;"></div>
+     <div class="absolute top-1/3 right-1/4 w-24 h-24 bg-yellow-300/20 rounded-full blur-xl floating" style="animation-delay: 0.5s;"></div><!-- Food Icons Floating -->
+     <div class="absolute top-32 right-16 text-4xl floating opacity-80" style="animation-delay: 0.2s;">
+      🥗
+     </div>
+     <div class="absolute top-48 left-20 text-3xl floating opacity-80" style="animation-delay: 0.7s;">
+      🍎
+     </div>
+     <div class="absolute bottom-32 left-32 text-4xl floating opacity-80" style="animation-delay: 1.2s;">
+      🥖
+     </div>
+     <div class="absolute bottom-48 right-32 text-3xl floating opacity-80" style="animation-delay: 0.4s;">
+      🥕
+     </div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+     <div class="grid lg:grid-cols-2 gap-12 items-center"><!-- Left Content -->
+      <div class="text-center lg:text-left slide-in-left">
+       <div class="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-medium mb-6"><span class="w-2 h-2 bg-yellow-400 rounded-full mr-2 animate-pulse"></span> Reducing Food Waste Together
+       </div>
+       <h1 id="heroTitle" class="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold text-white leading-tight mb-6">Share Food,<br><span class="text-yellow-300">Share Hope</span></h1>
+       <p id="heroSubtitle" class="text-lg sm:text-xl text-white/90 mb-8 max-w-xl mx-auto lg:mx-0 leading-relaxed">Join our community platform connecting food donors with those in need. Together, we can eliminate hunger and reduce waste in our neighborhoods.</p>
+       <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start"><button onclick="openModal('donateModal')" class="group px-8 py-4 bg-white text-emerald-700 font-bold rounded-2xl shadow-2xl hover:shadow-emerald-300/50 transition-all duration-300 hover:scale-105"> <span class="flex items-center justify-center"> Donate Food 
+          <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+          </svg></span> </button> <button onclick="openModal('requestModal')" class="px-8 py-4 bg-transparent border-2 border-white text-white font-bold rounded-2xl hover:bg-white/10 transition-all duration-300"> Request Food </button>
+       </div><!-- Quick Stats -->
+       <div class="grid grid-cols-3 gap-4 mt-12 pt-8 border-t border-white/20">
+        <div class="text-center">
+         <div class="counter-number text-3xl sm:text-4xl font-bold text-white" data-target="50000">
+          0
+         </div>
+         <p class="text-white/70 text-sm mt-1">Meals Shared</p>
+        </div>
+        <div class="text-center">
+         <div class="counter-number text-3xl sm:text-4xl font-bold text-white" data-target="5000">
+          0
+         </div>
+         <p class="text-white/70 text-sm mt-1">Active Donors</p>
+        </div>
+        <div class="text-center">
+         <div class="counter-number text-3xl sm:text-4xl font-bold text-white" data-target="120">
+          0
+         </div>
+         <p class="text-white/70 text-sm mt-1">Communities</p>
+        </div>
+       </div>
+      </div><!-- Right Content - Hero Image/Card -->
+      <div class="relative slide-in-right hidden lg:block">
+       <div class="relative"><!-- Main Card -->
+        <div class="glass-card rounded-3xl p-8 shadow-2xl pulse-glow">
+         <div class="flex items-center justify-between mb-6">
+          <h3 class="text-xl font-bold text-gray-800">Available Near You</h3><span class="px-3 py-1 bg-emerald-100 text-emerald-700 rounded-full text-sm font-medium">Live</span>
+         </div><!-- Food Items -->
+         <div class="space-y-4">
+          <div class="flex items-center p-4 bg-gradient-to-r from-emerald-50 to-transparent rounded-2xl hover:shadow-md transition-all cursor-pointer">
+           <div class="w-16 h-16 bg-orange-100 rounded-xl flex items-center justify-center text-3xl">
+            🍕
+           </div>
+           <div class="ml-4 flex-1">
+            <h4 class="font-semibold text-gray-800">Fresh Pizzas (8 boxes)</h4>
+            <p class="text-gray-500 text-sm">Mario's Restaurant • 0.5 km away</p>
+           </div><span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-medium">Fresh</span>
+          </div>
+          <div class="flex items-center p-4 bg-gradient-to-r from-emerald-50 to-transparent rounded-2xl hover:shadow-md transition-all cursor-pointer">
+           <div class="w-16 h-16 bg-yellow-100 rounded-xl flex items-center justify-center text-3xl">
+            🥖
+           </div>
+           <div class="ml-4 flex-1">
+            <h4 class="font-semibold text-gray-800">Bakery Items (20 pieces)</h4>
+            <p class="text-gray-500 text-sm">Golden Crust Bakery • 1.2 km away</p>
+           </div><span class="px-3 py-1 bg-green-100 text-green-700 rounded-lg text-xs font-medium">Fresh</span>
+          </div>
+          <div class="flex items-center p-4 bg-gradient-to-r from-emerald-50 to-transparent rounded-2xl hover:shadow-md transition-all cursor-pointer">
+           <div class="w-16 h-16 bg-green-100 rounded-xl flex items-center justify-center text-3xl">
+            🥬
+           </div>
+           <div class="ml-4 flex-1">
+            <h4 class="font-semibold text-gray-800">Fresh Vegetables (5 kg)</h4>
+            <p class="text-gray-500 text-sm">Green Valley Farm • 2.0 km away</p>
+           </div><span class="px-3 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">Organic</span>
+          </div>
+         </div><button class="w-full mt-6 py-3 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-semibold rounded-xl hover:shadow-lg transition-all"> View All Listings → </button>
+        </div><!-- Floating Badge -->
+        <div class="absolute -top-4 -right-4 bg-yellow-400 text-gray-900 px-4 py-2 rounded-xl font-bold shadow-lg transform rotate-6 floating">
+         100% Free! 🎉
+        </div>
+       </div>
+      </div>
+     </div>
+    </div><!-- Scroll Indicator -->
+    <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 scroll-indicator"><a href="#about" class="flex flex-col items-center text-white/70 hover:text-white transition-colors"> <span class="text-sm mb-2">Scroll to explore</span>
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+      </svg></a>
+    </div>
+   </section><!-- About Section -->
+   <section id="about" class="py-20 lg:py-32 bg-white food-pattern">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16"><span class="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold mb-4">About Our Mission</span>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Bridging the Gap Between<br><span class="text-gradient">Surplus and Need</span></h2>
+      <p class="text-gray-600 text-lg max-w-3xl mx-auto">FoodShare Connect is a revolutionary community platform designed to address food insecurity while simultaneously tackling the growing problem of food waste in our society.</p>
+     </div>
+     <div class="grid lg:grid-cols-2 gap-16 items-center"><!-- Left - Problem Statement -->
+      <div class="space-y-8">
+       <div class="glass-card rounded-2xl p-6 shadow-lg card-hover border-l-4 border-red-500">
+        <div class="flex items-start space-x-4">
+         <div class="w-14 h-14 bg-red-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+          😔
+         </div>
+         <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">The Problem</h3>
+          <p class="text-gray-600"><strong>828 million</strong> people face hunger globally, while <strong>1.3 billion tons</strong> of food is wasted annually. In our communities, restaurants, grocery stores, and households throw away perfectly good food every day.</p>
+         </div>
+        </div>
+       </div>
+       <div class="glass-card rounded-2xl p-6 shadow-lg card-hover border-l-4 border-emerald-500">
+        <div class="flex items-start space-x-4">
+         <div class="w-14 h-14 bg-emerald-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+          💡
+         </div>
+         <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Our Solution</h3>
+          <p class="text-gray-600">FoodShare Connect creates a direct bridge between those with surplus food and those in need. Our platform enables real-time food sharing, volunteer coordination, and community building.</p>
+         </div>
+        </div>
+       </div>
+       <div class="glass-card rounded-2xl p-6 shadow-lg card-hover border-l-4 border-blue-500">
+        <div class="flex items-start space-x-4">
+         <div class="w-14 h-14 bg-blue-100 rounded-xl flex items-center justify-center text-2xl flex-shrink-0">
+          🎯
+         </div>
+         <div>
+          <h3 class="text-xl font-bold text-gray-900 mb-2">Our Vision</h3>
+          <p class="text-gray-600">A world where no edible food goes to waste and no person goes hungry. We envision connected communities where sharing is the norm, not the exception.</p>
+         </div>
+        </div>
+       </div>
+      </div><!-- Right - SDG Goals -->
+      <div class="relative">
+       <div class="bg-gradient-to-br from-emerald-500 to-green-600 rounded-3xl p-8 text-white shadow-2xl">
+        <h3 class="text-2xl font-bold mb-6">Supporting UN Sustainable Development Goals</h3>
+        <div class="grid grid-cols-2 gap-4">
+         <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 text-center">
+          <div class="text-4xl mb-2">
+           🎯
+          </div>
+          <h4 class="font-bold">SDG 2</h4>
+          <p class="text-sm text-white/80">Zero Hunger</p>
+         </div>
+         <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 text-center">
+          <div class="text-4xl mb-2">
+           ♻️
+          </div>
+          <h4 class="font-bold">SDG 12</h4>
+          <p class="text-sm text-white/80">Responsible Consumption</p>
+         </div>
+         <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 text-center">
+          <div class="text-4xl mb-2">
+           🌍
+          </div>
+          <h4 class="font-bold">SDG 13</h4>
+          <p class="text-sm text-white/80">Climate Action</p>
+         </div>
+         <div class="bg-white/20 backdrop-blur-sm rounded-2xl p-4 text-center">
+          <div class="text-4xl mb-2">
+           🤝
+          </div>
+          <h4 class="font-bold">SDG 17</h4>
+          <p class="text-sm text-white/80">Partnerships</p>
+         </div>
+        </div>
+        <div class="mt-6 p-4 bg-white/10 rounded-xl">
+         <p class="text-sm italic">"When we share food, we share hope. Every meal donated is a step towards a more sustainable and compassionate world."</p>
+        </div>
+       </div><!-- Decorative -->
+       <div class="absolute -bottom-6 -left-6 w-24 h-24 bg-yellow-400 rounded-2xl flex items-center justify-center text-4xl shadow-lg transform -rotate-6">
+        🌱
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Features Section -->
+   <section id="features" class="py-20 lg:py-32 bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16"><span class="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold mb-4">Platform Features</span>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Everything You Need to<br><span class="text-gradient">Make a Difference</span></h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Our comprehensive platform provides all the tools needed for seamless food sharing and community coordination.</p>
+     </div>
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8"><!-- Feature 1 -->
+      <div class="glass-card rounded-2xl p-8 card-hover shadow-lg group">
+       <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+        📍
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-3">Location-Based Matching</h3>
+       <p class="text-gray-600">Smart GPS integration connects donors with nearby recipients, ensuring fresh food reaches those in need quickly and efficiently.</p>
+      </div><!-- Feature 2 -->
+      <div class="glass-card rounded-2xl p-8 card-hover shadow-lg group">
+       <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+        🔔
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-3">Real-Time Notifications</h3>
+       <p class="text-gray-600">Instant alerts when food becomes available in your area. Never miss an opportunity to help or receive assistance.</p>
+      </div><!-- Feature 3 -->
+      <div class="glass-card rounded-2xl p-8 card-hover shadow-lg group">
+       <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+        🚗
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-3">Volunteer Coordination</h3>
+       <p class="text-gray-600">Dedicated volunteer network for food pickup and delivery. Track volunteers in real-time and coordinate seamlessly.</p>
+      </div><!-- Feature 4 -->
+      <div class="glass-card rounded-2xl p-8 card-hover shadow-lg group">
+       <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+        📊
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-3">Impact Dashboard</h3>
+       <p class="text-gray-600">Track your contributions with detailed analytics. See meals shared, CO2 saved, and your community impact score.</p>
+      </div><!-- Feature 5 -->
+      <div class="glass-card rounded-2xl p-8 card-hover shadow-lg group">
+       <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+        ✅
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-3">Quality Verification</h3>
+       <p class="text-gray-600">Built-in food safety guidelines and verification system ensures all shared food meets quality standards.</p>
+      </div><!-- Feature 6 -->
+      <div class="glass-card rounded-2xl p-8 card-hover shadow-lg group">
+       <div class="feature-icon w-16 h-16 rounded-2xl flex items-center justify-center text-3xl mb-6 group-hover:scale-110 transition-transform">
+        💬
+       </div>
+       <h3 class="text-xl font-bold text-gray-900 mb-3">Community Chat</h3>
+       <p class="text-gray-600">In-app messaging for direct communication between donors, recipients, and volunteers. Build lasting connections.</p>
+      </div>
+     </div>
+    </div>
+   </section><!-- How It Works Section -->
+   <section id="how-it-works" class="py-20 lg:py-32 bg-gradient-to-br from-emerald-50 via-white to-green-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16"><span class="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold mb-4">Simple Process</span>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">How <span class="text-gradient">FoodShare</span> Works</h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Getting started is easy! Follow these simple steps to begin sharing or receiving food in your community.</p>
+     </div><!-- User Type Tabs -->
+     <div class="flex justify-center mb-12">
+      <div class="inline-flex bg-white rounded-2xl p-2 shadow-lg"><button onclick="switchTab('donors')" id="donorsTab" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all bg-emerald-500 text-white"> For Donors 🎁 </button> <button onclick="switchTab('recipients')" id="recipientsTab" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100"> For Recipients 🙏 </button> <button onclick="switchTab('volunteers')" id="volunteersTab" class="tab-btn px-6 py-3 rounded-xl font-semibold transition-all text-gray-600 hover:bg-gray-100"> For Volunteers 🦸 </button>
+      </div>
+     </div><!-- Donors Steps -->
+     <div id="donorsContent" class="tab-content">
+      <div class="grid md:grid-cols-4 gap-8">
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         1
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-emerald-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Sign Up</h3>
+        <p class="text-gray-600">Create your free account as a food donor in just 2 minutes</p>
+        <div class="mt-4 text-4xl">
+         📝
+        </div>
+       </div>
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         2
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-emerald-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">List Food</h3>
+        <p class="text-gray-600">Post details about available food with photos and pickup time</p>
+        <div class="mt-4 text-4xl">
+         📸
+        </div>
+       </div>
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         3
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-emerald-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Connect</h3>
+        <p class="text-gray-600">Recipients or volunteers will reach out to arrange pickup</p>
+        <div class="mt-4 text-4xl">
+         🤝
+        </div>
+       </div>
+       <div class="text-center">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-emerald-500 to-green-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         4
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Share &amp; Track</h3>
+        <p class="text-gray-600">Complete the donation and track your impact on the dashboard</p>
+        <div class="mt-4 text-4xl">
+         🌟
+        </div>
+       </div>
+      </div>
+     </div><!-- Recipients Steps -->
+     <div id="recipientsContent" class="tab-content hidden">
+      <div class="grid md:grid-cols-4 gap-8">
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         1
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-blue-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Register</h3>
+        <p class="text-gray-600">Sign up as a recipient - it's confidential and judgment-free</p>
+        <div class="mt-4 text-4xl">
+         🔐
+        </div>
+       </div>
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         2
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-blue-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Browse</h3>
+        <p class="text-gray-600">View available food listings in your area with details</p>
+        <div class="mt-4 text-4xl">
+         🔍
+        </div>
+       </div>
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         3
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-blue-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Request</h3>
+        <p class="text-gray-600">Request the food you need with one click</p>
+        <div class="mt-4 text-4xl">
+         ✋
+        </div>
+       </div>
+       <div class="text-center">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         4
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Receive</h3>
+        <p class="text-gray-600">Pickup or get delivery from our volunteer network</p>
+        <div class="mt-4 text-4xl">
+         🎉
+        </div>
+       </div>
+      </div>
+     </div><!-- Volunteers Steps -->
+     <div id="volunteersContent" class="tab-content hidden">
+      <div class="grid md:grid-cols-4 gap-8">
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         1
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-purple-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Join</h3>
+        <p class="text-gray-600">Register as a volunteer and set your availability</p>
+        <div class="mt-4 text-4xl">
+         🦸
+        </div>
+       </div>
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         2
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-purple-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Get Alerts</h3>
+        <p class="text-gray-600">Receive notifications for delivery requests nearby</p>
+        <div class="mt-4 text-4xl">
+         📱
+        </div>
+       </div>
+       <div class="text-center relative">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         3
+        </div>
+        <div class="hidden md:block absolute top-10 left-1/2 w-full h-1 bg-purple-200"></div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Deliver</h3>
+        <p class="text-gray-600">Pick up food from donors and deliver to recipients</p>
+        <div class="mt-4 text-4xl">
+         🚗
+        </div>
+       </div>
+       <div class="text-center">
+        <div class="w-20 h-20 mx-auto bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl flex items-center justify-center text-white text-3xl shadow-lg mb-4">
+         4
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-2">Earn Badges</h3>
+        <p class="text-gray-600">Track volunteer hours and earn recognition badges</p>
+        <div class="mt-4 text-4xl">
+         🏆
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Impact Section -->
+   <section id="impact" class="py-20 lg:py-32 bg-gradient-to-br from-emerald-600 via-green-600 to-teal-700 relative overflow-hidden"><!-- Background Elements -->
+    <div class="absolute inset-0">
+     <div class="absolute top-20 left-20 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+     <div class="absolute bottom-20 right-20 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+    </div>
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16"><span class="inline-block px-4 py-2 bg-white/20 text-white rounded-full text-sm font-semibold mb-4">Our Impact</span>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">Making a Real Difference<br>
+       In Our Communities</h2>
+      <p class="text-white/80 text-lg max-w-2xl mx-auto">Every donation, every delivery, every connection matters. See how our community is creating positive change.</p>
+     </div><!-- Impact Stats -->
+     <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+      <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center card-hover">
+       <div class="counter-number text-5xl lg:text-6xl font-bold text-white mb-2" data-target="50000">
+        0
+       </div>
+       <p class="text-white/80 font-medium">Meals Shared</p>
+       <div class="mt-4 text-4xl">
+        🍽️
+       </div>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center card-hover">
+       <div class="counter-number text-5xl lg:text-6xl font-bold text-white mb-2" data-target="12500">
+        0
+       </div>
+       <p class="text-white/80 font-medium">Families Helped</p>
+       <div class="mt-4 text-4xl">
+        👨‍👩‍👧‍👦
+       </div>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center card-hover">
+       <div class="counter-number text-5xl lg:text-6xl font-bold text-white mb-2" data-target="25000">
+        0
+       </div>
+       <p class="text-white/80 font-medium">kg Food Saved</p>
+       <div class="mt-4 text-4xl">
+        ♻️
+       </div>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-3xl p-8 text-center card-hover">
+       <div class="counter-number text-5xl lg:text-6xl font-bold text-white mb-2" data-target="75000">
+        0
+       </div>
+       <p class="text-white/80 font-medium">CO₂ kg Prevented</p>
+       <div class="mt-4 text-4xl">
+        🌍
+       </div>
+      </div>
+     </div><!-- Testimonials -->
+     <div class="grid md:grid-cols-3 gap-8">
+      <div class="testimonial-card rounded-3xl p-6 shadow-xl card-hover">
+       <div class="flex items-center mb-4">
+        <div class="w-12 h-12 bg-gradient-to-br from-emerald-400 to-green-500 rounded-full flex items-center justify-center text-white text-xl">
+         R
+        </div>
+        <div class="ml-3">
+         <h4 class="font-bold text-gray-900">Rajesh Kumar</h4>
+         <p class="text-sm text-gray-500">Restaurant Owner</p>
+        </div>
+       </div>
+       <p class="text-gray-600 italic">"FoodShare has transformed how we handle surplus food. Instead of throwing away perfectly good meals, we now feed families in need. It's a win-win!"</p>
+       <div class="flex text-yellow-400 mt-4">
+        ⭐⭐⭐⭐⭐
+       </div>
+      </div>
+      <div class="testimonial-card rounded-3xl p-6 shadow-xl card-hover">
+       <div class="flex items-center mb-4">
+        <div class="w-12 h-12 bg-gradient-to-br from-blue-400 to-indigo-500 rounded-full flex items-center justify-center text-white text-xl">
+         P
+        </div>
+        <div class="ml-3">
+         <h4 class="font-bold text-gray-900">Priya Sharma</h4>
+         <p class="text-sm text-gray-500">Community Volunteer</p>
+        </div>
+       </div>
+       <p class="text-gray-600 italic">"Being a volunteer has been incredibly rewarding. The platform makes it so easy to coordinate pickups and deliveries. I've met amazing people!"</p>
+       <div class="flex text-yellow-400 mt-4">
+        ⭐⭐⭐⭐⭐
+       </div>
+      </div>
+      <div class="testimonial-card rounded-3xl p-6 shadow-xl card-hover">
+       <div class="flex items-center mb-4">
+        <div class="w-12 h-12 bg-gradient-to-br from-purple-400 to-pink-500 rounded-full flex items-center justify-center text-white text-xl">
+         A
+        </div>
+        <div class="ml-3">
+         <h4 class="font-bold text-gray-900">Anita Reddy</h4>
+         <p class="text-sm text-gray-500">Food Recipient</p>
+        </div>
+       </div>
+       <p class="text-gray-600 italic">"During tough times, FoodShare was a blessing. The dignity and respect I received was overwhelming. Now I'm back on my feet and giving back!"</p>
+       <div class="flex text-yellow-400 mt-4">
+        ⭐⭐⭐⭐⭐
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Food Listings Section -->
+   <section class="py-20 lg:py-32 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16"><span class="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold mb-4">Available Now</span>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">Fresh Food <span class="text-gradient">Near You</span></h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Browse current food listings in your community. All items are verified for quality and safety.</p>
+     </div><!-- Food Grid -->
+     <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="foodListings"><!-- Food Card 1 -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-lg card-hover group">
+       <div class="relative h-48 bg-gradient-to-br from-orange-100 to-yellow-100 flex items-center justify-center"><span class="text-7xl group-hover:scale-110 transition-transform">🍕</span> <span class="absolute top-4 right-4 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">FRESH</span>
+       </div>
+       <div class="p-6">
+        <div class="flex justify-between items-start mb-3">
+         <h3 class="text-xl font-bold text-gray-900">Fresh Pizza Boxes</h3><span class="text-2xl">🍴</span>
+        </div>
+        <p class="text-gray-600 mb-4">8 boxes of assorted pizzas from today's event. Vegetarian and non-vegetarian options available.</p>
+        <div class="flex items-center text-sm text-gray-500 mb-4"><span class="mr-4">📍 Downtown Area</span> <span>⏰ 2 hours left</span>
+        </div>
+        <div class="flex items-center justify-between">
+         <div class="flex items-center">
+          <div class="w-8 h-8 bg-emerald-100 rounded-full flex items-center justify-center text-sm">
+           M
+          </div><span class="ml-2 text-sm text-gray-600">Mario's Restaurant</span>
+         </div><button onclick="openModal('requestModal')" class="px-4 py-2 bg-emerald-500 text-white text-sm font-semibold rounded-lg hover:bg-emerald-600 transition-colors"> Request </button>
+        </div>
+       </div>
+      </div><!-- Food Card 2 -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-lg card-hover group">
+       <div class="relative h-48 bg-gradient-to-br from-amber-100 to-orange-100 flex items-center justify-center"><span class="text-7xl group-hover:scale-110 transition-transform">🥖</span> <span class="absolute top-4 right-4 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">FRESH</span>
+       </div>
+       <div class="p-6">
+        <div class="flex justify-between items-start mb-3">
+         <h3 class="text-xl font-bold text-gray-900">Bakery Assortment</h3><span class="text-2xl">🥐</span>
+        </div>
+        <p class="text-gray-600 mb-4">20 pieces including croissants, bread loaves, and pastries. Baked fresh this morning.</p>
+        <div class="flex items-center text-sm text-gray-500 mb-4"><span class="mr-4">📍 Market Street</span> <span>⏰ 4 hours left</span>
+        </div>
+        <div class="flex items-center justify-between">
+         <div class="flex items-center">
+          <div class="w-8 h-8 bg-amber-100 rounded-full flex items-center justify-center text-sm">
+           G
+          </div><span class="ml-2 text-sm text-gray-600">Golden Crust Bakery</span>
+         </div><button onclick="openModal('requestModal')" class="px-4 py-2 bg-emerald-500 text-white text-sm font-semibold rounded-lg hover:bg-emerald-600 transition-colors"> Request </button>
+        </div>
+       </div>
+      </div><!-- Food Card 3 -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-lg card-hover group">
+       <div class="relative h-48 bg-gradient-to-br from-green-100 to-emerald-100 flex items-center justify-center"><span class="text-7xl group-hover:scale-110 transition-transform">🥬</span> <span class="absolute top-4 right-4 px-3 py-1 bg-blue-500 text-white text-xs font-bold rounded-full">ORGANIC</span>
+       </div>
+       <div class="p-6">
+        <div class="flex justify-between items-start mb-3">
+         <h3 class="text-xl font-bold text-gray-900">Fresh Vegetables</h3><span class="text-2xl">🥕</span>
+        </div>
+        <p class="text-gray-600 mb-4">5 kg mix of organic vegetables including tomatoes, carrots, spinach, and bell peppers.</p>
+        <div class="flex items-center text-sm text-gray-500 mb-4"><span class="mr-4">📍 Green Valley</span> <span>⏰ 6 hours left</span>
+        </div>
+        <div class="flex items-center justify-between">
+         <div class="flex items-center">
+          <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-sm">
+           V
+          </div><span class="ml-2 text-sm text-gray-600">Valley Farms</span>
+         </div><button onclick="openModal('requestModal')" class="px-4 py-2 bg-emerald-500 text-white text-sm font-semibold rounded-lg hover:bg-emerald-600 transition-colors"> Request </button>
+        </div>
+       </div>
+      </div><!-- Food Card 4 -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-lg card-hover group">
+       <div class="relative h-48 bg-gradient-to-br from-red-100 to-pink-100 flex items-center justify-center"><span class="text-7xl group-hover:scale-110 transition-transform">🍎</span> <span class="absolute top-4 right-4 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">FRESH</span>
+       </div>
+       <div class="p-6">
+        <div class="flex justify-between items-start mb-3">
+         <h3 class="text-xl font-bold text-gray-900">Fresh Fruits Basket</h3><span class="text-2xl">🍇</span>
+        </div>
+        <p class="text-gray-600 mb-4">Assorted fresh fruits including apples, oranges, bananas, and grapes. Perfect for families.</p>
+        <div class="flex items-center text-sm text-gray-500 mb-4"><span class="mr-4">📍 City Center</span> <span>⏰ 3 hours left</span>
+        </div>
+        <div class="flex items-center justify-between">
+         <div class="flex items-center">
+          <div class="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-sm">
+           F
+          </div><span class="ml-2 text-sm text-gray-600">Fresh Mart</span>
+         </div><button onclick="openModal('requestModal')" class="px-4 py-2 bg-emerald-500 text-white text-sm font-semibold rounded-lg hover:bg-emerald-600 transition-colors"> Request </button>
+        </div>
+       </div>
+      </div><!-- Food Card 5 -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-lg card-hover group">
+       <div class="relative h-48 bg-gradient-to-br from-yellow-100 to-amber-100 flex items-center justify-center"><span class="text-7xl group-hover:scale-110 transition-transform">🍚</span> <span class="absolute top-4 right-4 px-3 py-1 bg-purple-500 text-white text-xs font-bold rounded-full">COOKED</span>
+       </div>
+       <div class="p-6">
+        <div class="flex justify-between items-start mb-3">
+         <h3 class="text-xl font-bold text-gray-900">Catering Leftovers</h3><span class="text-2xl">🍛</span>
+        </div>
+        <p class="text-gray-600 mb-4">30 portions of biryani, dal, and curry from a corporate event. Hygienically packed.</p>
+        <div class="flex items-center text-sm text-gray-500 mb-4"><span class="mr-4">📍 Tech Park</span> <span>⏰ 1 hour left</span>
+        </div>
+        <div class="flex items-center justify-between">
+         <div class="flex items-center">
+          <div class="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center text-sm">
+           S
+          </div><span class="ml-2 text-sm text-gray-600">Spice Kitchen</span>
+         </div><button onclick="openModal('requestModal')" class="px-4 py-2 bg-emerald-500 text-white text-sm font-semibold rounded-lg hover:bg-emerald-600 transition-colors"> Request </button>
+        </div>
+       </div>
+      </div><!-- Food Card 6 -->
+      <div class="glass-card rounded-2xl overflow-hidden shadow-lg card-hover group">
+       <div class="relative h-48 bg-gradient-to-br from-blue-100 to-cyan-100 flex items-center justify-center"><span class="text-7xl group-hover:scale-110 transition-transform">🥛</span> <span class="absolute top-4 right-4 px-3 py-1 bg-green-500 text-white text-xs font-bold rounded-full">FRESH</span>
+       </div>
+       <div class="p-6">
+        <div class="flex justify-between items-start mb-3">
+         <h3 class="text-xl font-bold text-gray-900">Dairy Products</h3><span class="text-2xl">🧀</span>
+        </div>
+        <p class="text-gray-600 mb-4">Milk, yogurt, and cheese nearing best-by date but still perfectly good. From local dairy.</p>
+        <div class="flex items-center text-sm text-gray-500 mb-4"><span class="mr-4">📍 Dairy Lane</span> <span>⏰ 5 hours left</span>
+        </div>
+        <div class="flex items-center justify-between">
+         <div class="flex items-center">
+          <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-sm">
+           D
+          </div><span class="ml-2 text-sm text-gray-600">Daily Dairy</span>
+         </div><button onclick="openModal('requestModal')" class="px-4 py-2 bg-emerald-500 text-white text-sm font-semibold rounded-lg hover:bg-emerald-600 transition-colors"> Request </button>
+        </div>
+       </div>
+      </div>
+     </div>
+     <div class="text-center mt-12"><button class="btn-primary px-8 py-4 text-white font-bold rounded-2xl shadow-lg text-lg"> View All Listings → </button>
+     </div>
+    </div>
+   </section><!-- CTA Section -->
+   <section class="py-20 lg:py-32 bg-gradient-to-r from-gray-900 via-emerald-900 to-gray-900 relative overflow-hidden">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%2310b981\' fill-opacity=\'0.1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"></div>
+    <div class="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+     <div class="inline-flex items-center px-4 py-2 bg-emerald-500/20 rounded-full text-emerald-400 text-sm font-medium mb-6"><span class="w-2 h-2 bg-emerald-400 rounded-full mr-2 animate-pulse"></span> Join the Movement
+     </div>
+     <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-6">Ready to Make a<br><span class="text-emerald-400">Difference?</span></h2>
+     <p class="text-gray-300 text-lg mb-10 max-w-2xl mx-auto">Whether you have food to share or need support, our community is here for you. Join thousands of people building a hunger-free world together.</p>
+     <div class="flex flex-col sm:flex-row gap-4 justify-center"><button onclick="openModal('signupModal')" class="group px-8 py-4 bg-gradient-to-r from-emerald-500 to-green-600 text-white font-bold rounded-2xl shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-105"> <span class="flex items-center justify-center"> Get Started Free 
+        <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+        </svg></span> </button> <button onclick="scrollToSection('contact')" class="px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-bold rounded-2xl hover:bg-white/20 transition-all duration-300"> Contact Us </button>
+     </div>
+     <div class="mt-12 flex flex-wrap justify-center gap-8 text-gray-400">
+      <div class="flex items-center">
+       <svg class="w-5 h-5 text-emerald-400 mr-2" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+       </svg> 100% Free to Use
+      </div>
+      <div class="flex items-center">
+       <svg class="w-5 h-5 text-emerald-400 mr-2" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+       </svg> No Hidden Fees
+      </div>
+      <div class="flex items-center">
+       <svg class="w-5 h-5 text-emerald-400 mr-2" fill="currentColor" viewbox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+       </svg> Privacy Protected
+      </div>
+     </div>
+    </div>
+   </section><!-- Contact Section -->
+   <section id="contact" class="py-20 lg:py-32 bg-gradient-to-b from-gray-50 to-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="text-center mb-16"><span class="inline-block px-4 py-2 bg-emerald-100 text-emerald-700 rounded-full text-sm font-semibold mb-4">Get In Touch</span>
+      <h2 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-gray-900 mb-6">We'd Love to <span class="text-gradient">Hear From You</span></h2>
+      <p class="text-gray-600 text-lg max-w-2xl mx-auto">Have questions, suggestions, or want to partner with us? Reach out and let's make a difference together.</p>
+     </div>
+     <div class="grid lg:grid-cols-2 gap-16"><!-- Contact Form -->
+      <div class="glass-card rounded-3xl p-8 shadow-xl">
+       <h3 class="text-2xl font-bold text-gray-900 mb-6">Send us a Message</h3>
+       <form id="contactForm" class="space-y-6">
+        <div class="grid sm:grid-cols-2 gap-6">
+         <div><label for="contactName" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label> <input type="text" id="contactName" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="Your name">
+         </div>
+         <div><label for="contactEmail" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label> <input type="email" id="contactEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="you@example.com">
+         </div>
+        </div>
+        <div><label for="contactSubject" class="block text-sm font-medium text-gray-700 mb-2">Subject</label> <input type="text" id="contactSubject" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="How can we help?">
+        </div>
+        <div><label for="contactMessage" class="block text-sm font-medium text-gray-700 mb-2">Message</label> <textarea id="contactMessage" rows="5" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none" placeholder="Your message..."></textarea>
+        </div><button type="submit" class="w-full btn-primary py-4 text-white font-bold rounded-xl shadow-lg text-lg"> Send Message 📨 </button>
+       </form>
+      </div><!-- Contact Info -->
+      <div class="space-y-8">
+       <div class="glass-card rounded-2xl p-6 shadow-lg card-hover">
+        <div class="flex items-center space-x-4">
+         <div class="w-14 h-14 bg-gradient-to-br from-emerald-500 to-green-600 rounded-xl flex items-center justify-center text-2xl text-white">
+          📧
+         </div>
+         <div>
+          <h4 class="font-bold text-gray-900">Email Us</h4>
+          <p class="text-gray-600">ketanasindhu@klh.edu.in</p>
+         </div>
+        </div>
+       </div>
+       <div class="glass-card rounded-2xl p-6 shadow-lg card-hover">
+        <div class="flex items-center space-x-4">
+         <div class="w-14 h-14 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl flex items-center justify-center text-2xl text-white">
+          📱
+         </div>
+         <div>
+          <h4 class="font-bold text-gray-900">Call Us</h4>
+          <p class="text-gray-600">+91 94925xxxxx</p>
+         </div>
+        </div>
+       </div>
+       <div class="glass-card rounded-2xl p-6 shadow-lg card-hover">
+        <div class="flex items-center space-x-4">
+         <div class="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-600 rounded-xl flex items-center justify-center text-2xl text-white">
+          📍
+         </div>
+         <div>
+          <h4 class="font-bold text-gray-900">Visit Us</h4>
+          <p class="text-gray-600">KL University, Hyderabad, India</p>
+         </div>
+        </div>
+       </div><!-- Social Links -->
+       <div class="glass-card rounded-2xl p-6 shadow-lg">
+        <h4 class="font-bold text-gray-900 mb-4">Follow Us</h4>
+        <div class="flex space-x-4"><a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center text-white text-xl hover:scale-110 transition-transform"> f </a> <a href="#" class="w-12 h-12 bg-gradient-to-br from-sky-400 to-blue-500 rounded-xl flex items-center justify-center text-white text-xl hover:scale-110 transition-transform"> 𝕏 </a> <a href="#" class="w-12 h-12 bg-gradient-to-br from-pink-500 to-rose-600 rounded-xl flex items-center justify-center text-white text-xl hover:scale-110 transition-transform"> 📷 </a> <a href="#" class="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-700 rounded-xl flex items-center justify-center text-white text-xl hover:scale-110 transition-transform"> in </a>
+        </div>
+       </div>
+      </div>
+     </div>
+    </div>
+   </section><!-- Footer -->
+   <footer class="bg-gray-900 text-white py-16">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+     <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12"><!-- Brand -->
+      <div>
+       <div class="flex items-center space-x-2 mb-6">
+        <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg"><span class="text-white text-2xl">🍽️</span>
+        </div>
+        <div>
+         <h3 class="text-xl font-bold">FoodShare</h3>
+         <p class="text-xs text-gray-400">Connect &amp; Share</p>
+        </div>
+       </div>
+       <p class="text-gray-400 mb-6">Building stronger communities through food sharing. Together, we can eliminate hunger and reduce waste.</p>
+       <div class="flex space-x-3"><a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">f</a> <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">𝕏</a> <a href="#" class="w-10 h-10 bg-gray-800 rounded-lg flex items-center justify-center hover:bg-emerald-600 transition-colors">📷</a>
+       </div>
+      </div><!-- Quick Links -->
+      <div>
+       <h4 class="text-lg font-bold mb-6">Quick Links</h4>
+       <ul class="space-y-3">
+        <li><a href="#home" class="text-gray-400 hover:text-emerald-400 transition-colors">Home</a></li>
+        <li><a href="#about" class="text-gray-400 hover:text-emerald-400 transition-colors">About Us</a></li>
+        <li><a href="#features" class="text-gray-400 hover:text-emerald-400 transition-colors">Features</a></li>
+        <li><a href="#how-it-works" class="text-gray-400 hover:text-emerald-400 transition-colors">How It Works</a></li>
+        <li><a href="#impact" class="text-gray-400 hover:text-emerald-400 transition-colors">Our Impact</a></li>
+       </ul>
+      </div><!-- Get Involved -->
+      <div>
+       <h4 class="text-lg font-bold mb-6">Get Involved</h4>
+       <ul class="space-y-3">
+        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition-colors">Donate Food</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition-colors">Request Food</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition-colors">Volunteer</a></li>
+        <li><a href="#" class="text-gray-400 hover:text-emerald-400 transition-colors">Partner With Us</a></li>
+        <li><a href="#contact" class="text-gray-400 hover:text-emerald-400 transition-colors">Contact</a></li>
+       </ul>
+      </div><!-- Contact Info -->
+      <div>
+       <h4 class="text-lg font-bold mb-6">Contact Info</h4>
+       <ul class="space-y-4">
+        <li class="flex items-start space-x-3"><span class="text-emerald-400">👤</span> <span class="text-gray-400">KetanaSindhu Somisetty</span></li>
+        <li class="flex items-start space-x-3"><span class="text-emerald-400">📱</span> <span class="text-gray-400">+91 94925xxxxx</span></li>
+        <li class="flex items-start space-x-3"><span class="text-emerald-400">📧</span> <span class="text-gray-400">ketanasindhu@klh.edu.in</span></li>
+        <li class="flex items-start space-x-3"><span class="text-emerald-400">📍</span> <span class="text-gray-400">KL University, Hyderabad, India</span></li>
+       </ul>
+      </div>
+     </div><!-- Divider -->
+     <div class="border-t border-gray-800 pt-8">
+      <div class="flex flex-col md:flex-row justify-between items-center">
+       <p class="text-gray-500 text-sm mb-4 md:mb-0">© 2024 FoodShare Connect. All rights reserved. Made with ❤️ by <span class="text-emerald-400">KetanaSindhu Somisetty</span></p>
+       <div class="flex space-x-6 text-sm"><a href="#" class="text-gray-500 hover:text-emerald-400 transition-colors">Privacy Policy</a> <a href="#" class="text-gray-500 hover:text-emerald-400 transition-colors">Terms of Service</a> <a href="#" class="text-gray-500 hover:text-emerald-400 transition-colors">Cookie Policy</a>
+       </div>
+      </div>
+     </div>
+    </div>
+   </footer><!-- Modals --> <!-- Login Modal -->
+   <div id="loginModal" class="modal items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="glass-card rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl scale-in">
+     <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-gray-900">Welcome Back! 👋</h3><button onclick="closeModal('loginModal')" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"> ✕ </button>
+     </div>
+     <form id="loginForm" class="space-y-4">
+      <div><label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label> <input type="email" id="loginEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="you@example.com">
+      </div>
+      <div><label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label> <input type="password" id="loginPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="••••••••">
+      </div>
+      <div class="flex justify-between items-center"><label class="flex items-center"> <input type="checkbox" class="w-4 h-4 text-emerald-600 border-gray-300 rounded focus:ring-emerald-500"> <span class="ml-2 text-sm text-gray-600">Remember me</span> </label> <a href="#" class="text-sm text-emerald-600 hover:underline">Forgot password?</a>
+      </div><button type="submit" class="w-full btn-primary py-3 text-white font-bold rounded-xl shadow-lg"> Sign In </button>
+     </form>
+     <p class="text-center text-gray-600 mt-6">Don't have an account? <a href="#" onclick="closeModal('loginModal'); openModal('signupModal');" class="text-emerald-600 font-semibold hover:underline">Sign up</a></p>
+    </div>
+   </div><!-- Signup Modal -->
+   <div id="signupModal" class="modal items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="glass-card rounded-3xl p-8 max-w-md w-full mx-4 shadow-2xl scale-in max-h-screen overflow-y-auto">
+     <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-gray-900">Join FoodShare! 🎉</h3><button onclick="closeModal('signupModal')" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"> ✕ </button>
+     </div>
+     <form id="signupForm" class="space-y-4">
+      <div><label for="signupName" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label> <input type="text" id="signupName" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="Your name">
+      </div>
+      <div><label for="signupEmail" class="block text-sm font-medium text-gray-700 mb-2">Email Address</label> <input type="email" id="signupEmail" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="you@example.com">
+      </div>
+      <div><label for="signupPhone" class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label> <input type="tel" id="signupPhone" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="+91 12345 67890">
+      </div>
+      <div><label class="block text-sm font-medium text-gray-700 mb-2">I want to</label>
+       <div class="grid grid-cols-3 gap-2"><label class="flex items-center justify-center p-3 border border-gray-300 rounded-xl cursor-pointer hover:border-emerald-500 transition-colors"> <input type="checkbox" name="role" value="donor" class="sr-only peer"> <span class="text-center peer-checked:text-emerald-600"> <span class="text-2xl block">🎁</span> <span class="text-xs">Donate</span> </span> </label> <label class="flex items-center justify-center p-3 border border-gray-300 rounded-xl cursor-pointer hover:border-emerald-500 transition-colors"> <input type="checkbox" name="role" value="recipient" class="sr-only peer"> <span class="text-center peer-checked:text-emerald-600"> <span class="text-2xl block">🙏</span> <span class="text-xs">Receive</span> </span> </label> <label class="flex items-center justify-center p-3 border border-gray-300 rounded-xl cursor-pointer hover:border-emerald-500 transition-colors"> <input type="checkbox" name="role" value="volunteer" class="sr-only peer"> <span class="text-center peer-checked:text-emerald-600"> <span class="text-2xl block">🦸</span> <span class="text-xs">Volunteer</span> </span> </label>
+       </div>
+      </div>
+      <div><label for="signupPassword" class="block text-sm font-medium text-gray-700 mb-2">Password</label> <input type="password" id="signupPassword" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="••••••••">
+      </div><button type="submit" class="w-full btn-primary py-3 text-white font-bold rounded-xl shadow-lg"> Create Account </button>
+     </form>
+     <p class="text-center text-gray-600 mt-6">Already have an account? <a href="#" onclick="closeModal('signupModal'); openModal('loginModal');" class="text-emerald-600 font-semibold hover:underline">Sign in</a></p>
+    </div>
+   </div><!-- Donate Modal -->
+   <div id="donateModal" class="modal items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="glass-card rounded-3xl p-8 max-w-lg w-full mx-4 shadow-2xl scale-in max-h-screen overflow-y-auto">
+     <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-gray-900">Donate Food 🎁</h3><button onclick="closeModal('donateModal')" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"> ✕ </button>
+     </div>
+     <form id="donateForm" class="space-y-4">
+      <div><label for="foodType" class="block text-sm font-medium text-gray-700 mb-2">Food Type</label> <select id="foodType" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"> <option value="">Select food type</option> <option value="cooked">Cooked Food</option> <option value="raw">Raw Ingredients</option> <option value="packaged">Packaged Food</option> <option value="fruits">Fruits &amp; Vegetables</option> <option value="bakery">Bakery Items</option> <option value="dairy">Dairy Products</option> </select>
+      </div>
+      <div><label for="foodDescription" class="block text-sm font-medium text-gray-700 mb-2">Description</label> <textarea id="foodDescription" rows="3" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none" placeholder="Describe the food items..."></textarea>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+       <div><label for="quantity" class="block text-sm font-medium text-gray-700 mb-2">Quantity</label> <input type="text" id="quantity" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="e.g., 5 kg, 10 plates">
+       </div>
+       <div><label for="expiryTime" class="block text-sm font-medium text-gray-700 mb-2">Best Before</label> <input type="text" id="expiryTime" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="e.g., 4 hours">
+       </div>
+      </div>
+      <div><label for="pickupAddress" class="block text-sm font-medium text-gray-700 mb-2">Pickup Address</label> <input type="text" id="pickupAddress" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="Enter pickup location">
+      </div>
+      <div><label for="donorContact" class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label> <input type="tel" id="donorContact" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="+91 12345 67890">
+      </div><button type="submit" class="w-full btn-primary py-3 text-white font-bold rounded-xl shadow-lg"> Submit Donation 🎉 </button>
+     </form>
+    </div>
+   </div><!-- Request Modal -->
+   <div id="requestModal" class="modal items-center justify-center bg-black/50 backdrop-blur-sm">
+    <div class="glass-card rounded-3xl p-8 max-w-lg w-full mx-4 shadow-2xl scale-in max-h-screen overflow-y-auto">
+     <div class="flex justify-between items-center mb-6">
+      <h3 class="text-2xl font-bold text-gray-900">Request Food 🙏</h3><button onclick="closeModal('requestModal')" class="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center hover:bg-gray-200 transition-colors"> ✕ </button>
+     </div>
+     <form id="requestForm" class="space-y-4">
+      <div><label for="requestName" class="block text-sm font-medium text-gray-700 mb-2">Your Name</label> <input type="text" id="requestName" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="Your name">
+      </div>
+      <div><label for="familySize" class="block text-sm font-medium text-gray-700 mb-2">Family Size</label> <select id="familySize" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all"> <option value="">Select family size</option> <option value="1">1 Person</option> <option value="2-3">2-3 People</option> <option value="4-5">4-5 People</option> <option value="6+">6+ People</option> </select>
+      </div>
+      <div><label for="preferredFood" class="block text-sm font-medium text-gray-700 mb-2">Food Preference</label>
+       <div class="flex space-x-4"><label class="flex items-center"> <input type="radio" name="foodPref" value="veg" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500"> <span class="ml-2 text-gray-700">🥬 Vegetarian</span> </label> <label class="flex items-center"> <input type="radio" name="foodPref" value="nonveg" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500"> <span class="ml-2 text-gray-700">🍗 Non-Veg</span> </label> <label class="flex items-center"> <input type="radio" name="foodPref" value="any" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500"> <span class="ml-2 text-gray-700">Any</span> </label>
+       </div>
+      </div>
+      <div><label for="deliveryAddress" class="block text-sm font-medium text-gray-700 mb-2">Delivery Address</label> <input type="text" id="deliveryAddress" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="Enter your address">
+      </div>
+      <div><label for="requestContact" class="block text-sm font-medium text-gray-700 mb-2">Contact Number</label> <input type="tel" id="requestContact" required class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all" placeholder="+91 12345 67890">
+      </div>
+      <div><label for="additionalNotes" class="block text-sm font-medium text-gray-700 mb-2">Additional Notes (Optional)</label> <textarea id="additionalNotes" rows="2" class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all resize-none" placeholder="Any allergies or special requirements..."></textarea>
+      </div><button type="submit" class="w-full btn-primary py-3 text-white font-bold rounded-xl shadow-lg"> Submit Request 📨 </button>
+     </form>
+    </div>
+   </div><!-- Toast Notification -->
+   <div id="toast" class="toast">
+    <div class="flex items-center space-x-3"><span class="text-2xl" id="toastIcon">✅</span> <span id="toastMessage">Success!</span>
+    </div>
+   </div>
+  </div>
+  <script>
+        // Configuration
+        const defaultConfig = {
+            hero_title: 'Share Food, Share Hope',
+            hero_subtitle: 'Join our community platform connecting food donors with those in need. Together, we can eliminate hunger and reduce waste in our neighborhoods.',
+            primary_color: '#059669',
+            secondary_color: '#10b981',
+            text_color: '#1f2937',
+            background_color: '#f9fafb',
+            accent_color: '#fbbf24'
+        };
+
+        let config = { ...defaultConfig };
+
+        // Initialize Element SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange: async (newConfig) => {
+                    config = { ...config, ...newConfig };
+                    
+                    // Update hero title
+                    const heroTitle = document.getElementById('heroTitle');
+                    if (heroTitle && config.hero_title) {
+                        const parts = config.hero_title.split(',');
+                        if (parts.length > 1) {
+                            heroTitle.innerHTML = `${parts[0]},<br><span class="text-yellow-300">${parts[1]}</span>`;
+                        } else {
+                            heroTitle.textContent = config.hero_title;
+                        }
+                    }
+                    
+                    // Update hero subtitle
+                    const heroSubtitle = document.getElementById('heroSubtitle');
+                    if (heroSubtitle && config.hero_subtitle) {
+                        heroSubtitle.textContent = config.hero_subtitle;
+                    }
+                },
+                mapToCapabilities: (cfg) => ({
+                    recolorables: [
+                        {
+                            get: () => cfg.primary_color || defaultConfig.primary_color,
+                            set: (value) => {
+                                config.primary_color = value;
+                                if (window.elementSdk) window.elementSdk.setConfig({ primary_color: value });
+                            }
+                        },
+                        {
+                            get: () => cfg.secondary_color || defaultConfig.secondary_color,
+                            set: (value) => {
+                                config.secondary_color = value;
+                                if (window.elementSdk) window.elementSdk.setConfig({ secondary_color: value });
+                            }
+                        },
+                        {
+                            get: () => cfg.text_color || defaultConfig.text_color,
+                            set: (value) => {
+                                config.text_color = value;
+                                if (window.elementSdk) window.elementSdk.setConfig({ text_color: value });
+                            }
+                        }
+                    ],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (cfg) => new Map([
+                    ['hero_title', cfg.hero_title || defaultConfig.hero_title],
+                    ['hero_subtitle', cfg.hero_subtitle || defaultConfig.hero_subtitle]
+                ])
+            });
+        }
+
+        // Mobile Menu Functions
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileOverlay');
+            const menuIcon = document.getElementById('menuIcon');
+            const closeIcon = document.getElementById('closeIcon');
+            
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
+            menuIcon.classList.toggle('hidden');
+            closeIcon.classList.toggle('hidden');
+        }
+
+        function closeMobileMenu() {
+            const mobileMenu = document.getElementById('mobileMenu');
+            const overlay = document.getElementById('mobileOverlay');
+            const menuIcon = document.getElementById('menuIcon');
+            const closeIcon = document.getElementById('closeIcon');
+            
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            menuIcon.classList.remove('hidden');
+            closeIcon.classList.add('hidden');
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                document.body.style.overflow = '';
+            }
+        }
+
+        // Close modal on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                }
+            });
+        });
+
+        // Tab Switching for How It Works
+        function switchTab(tabName) {
+            // Hide all content
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            
+            // Remove active state from all tabs
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-500', 'text-white');
+                btn.classList.add('text-gray-600');
+            });
+            
+            // Show selected content
+            document.getElementById(tabName + 'Content').classList.remove('hidden');
+            
+            // Add active state to selected tab
+            const activeTab = document.getElementById(tabName + 'Tab');
+            activeTab.classList.add('bg-emerald-500', 'text-white');
+            activeTab.classList.remove('text-gray-600');
+        }
+
+        // Toast Notification
+        function showToast(message, icon = '✅') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMessage.textContent = message;
+            toastIcon.textContent = icon;
+            toast.classList.add('active');
+            
+            setTimeout(() => {
+                toast.classList.remove('active');
+            }, 3000);
+        }
+
+        // Form Submissions
+        document.getElementById('contactForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            showToast('Message sent successfully! We\'ll get back to you soon.', '📨');
+            e.target.reset();
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            closeModal('loginModal');
+            showToast('Welcome back! You\'re now logged in.', '👋');
+            e.target.reset();
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            closeModal('signupModal');
+            showToast('Account created successfully! Welcome to FoodShare.', '🎉');
+            e.target.reset();
+        });
+
+        document.getElementById('donateForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            closeModal('donateModal');
+            showToast('Thank you for your donation! Someone will contact you soon.', '💚');
+            e.target.reset();
+        });
+
+        document.getElementById('requestForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            closeModal('requestModal');
+            showToast('Request submitted! We\'ll find food for you soon.', '🙏');
+            e.target.reset();
+        });
+
+        // Smooth Scroll
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            if (section) {
+                section.scrollIntoView({ behavior: 'smooth' });
+            }
+        }
+
+        // Counter Animation
+        function animateCounters() {
+            const counters = document.querySelectorAll('.counter-number');
+            
+            counters.forEach(counter => {
+                const target = parseInt(counter.getAttribute('data-target'));
+                const duration = 2000;
+                const increment = target / (duration / 16);
+                let current = 0;
+                
+                const updateCounter = () => {
+                    current += increment;
+                    if (current < target) {
+                        counter.textContent = Math.ceil(current).toLocaleString();
+                        requestAnimationFrame(updateCounter);
+                    } else {
+                        counter.textContent = target.toLocaleString() + '+';
+                    }
+                };
+                
+                updateCounter();
+            });
+        }
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('fade-in-up');
+                    
+                    // Trigger counter animation when impact section is visible
+                    if (entry.target.id === 'impact') {
+                        animateCounters();
+                    }
+                }
+            });
+        }, observerOptions);
+
+        // Observe sections
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
+        });
+
+        // Navbar scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('nav');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 100) {
+                nav.classList.add('shadow-md');
+            } else {
+                nav.classList.remove('shadow-md');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Initialize counters on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initial animation for hero section counters
+            setTimeout(() => {
+                const heroCounters = document.querySelectorAll('#home .counter-number');
+                heroCounters.forEach(counter => {
+                    const target = parseInt(counter.getAttribute('data-target'));
+                    const duration = 2000;
+                    const increment = target / (duration / 16);
+                    let current = 0;
+                    
+                    const updateCounter = () => {
+                        current += increment;
+                        if (current < target) {
+                            counter.textContent = Math.ceil(current).toLocaleString();
+                            requestAnimationFrame(updateCounter);
+                        } else {
+                            counter.textContent = target.toLocaleString() + '+';
+                        }
+                    };
+                    
+                    updateCounter();
+                });
+            }, 500);
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal.active').forEach(modal => {
+                    modal.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+                closeMobileMenu();
+            }
+        });
+
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9d2d7e5a45a77dbf',t:'MTc3MTkyMDcwMC4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
