@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FoodShare Connect</title>
+
+<!-- Tailwind -->
+<script src="https://cdn.tailwindcss.com/3.4.17"></script>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+
+<!-- External CSS -->
+<link rel="stylesheet" href="style.css">
+
+</head>
+
+<body class="h-full bg-gray-50">
+
+<div class="app-wrapper">
+
+<!-- ===== NAVBAR ===== -->
+<nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md shadow-sm">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between items-center h-16 md:h-20">
+
+<div class="flex items-center space-x-2">
+<div class="w-10 h-10 md:w-12 md:h-12 rounded-xl bg-gradient-to-br from-emerald-500 to-green-600 flex items-center justify-center shadow-lg">
+<span class="text-white text-xl md:text-2xl">🍽️</span>
+</div>
+
+<div>
+<h1 class="text-lg md:text-xl font-bold text-gradient">FoodShare</h1>
+<p class="text-xs text-gray-500 -mt-1 hidden sm:block">Connect & Share</p>
+</div>
+</div>
+
+<div class="hidden md:flex items-center space-x-8">
+<a href="#home" class="nav-link">Home</a>
+<a href="#about" class="nav-link">About</a>
+<a href="#features" class="nav-link">Features</a>
+<a href="#contact" class="nav-link">Contact</a>
+</div>
+
+</div>
+</div>
+</nav>
+
+<!-- ===== HERO SECTION ===== -->
+<section id="home" class="hero-gradient min-h-screen flex items-center">
+
+<div class="max-w-7xl mx-auto px-6 text-center text-white">
+
+<h1 class="text-5xl font-bold mb-6">
+Share Food,<br>
+<span class="text-yellow-300">Share Hope</span>
+</h1>
+
+<p class="text-xl mb-8">
+Connecting food donors with people in need.
+Reduce food waste. Help communities.
+</p>
+
+<button onclick="openModal('donateModal')" class="btn-primary px-8 py-4 rounded-xl">
+Donate Food
+</button>
+
+</div>
+
+</section>
+
+<!-- ===== CONTACT SECTION ===== -->
+<section id="contact" class="py-20 bg-white text-center">
+
+<h2 class="text-3xl font-bold mb-6">Contact Us</h2>
+
+<form id="contactForm" class="max-w-xl mx-auto space-y-4">
+
+<input type="text" placeholder="Name" required class="input">
+
+<input type="email" placeholder="Email" required class="input">
+
+<textarea placeholder="Message" rows="4" required class="input"></textarea>
+
+<button type="submit" class="btn-primary px-6 py-3 rounded-xl">
+Send Message
+</button>
+
+</form>
+
+</section>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast">
+<span id="toastMessage">Success!</span>
+</div>
+
+</div>
+
+<!-- External JS -->
+<script src="script.js"></script>
+
+</body>
+</html>
